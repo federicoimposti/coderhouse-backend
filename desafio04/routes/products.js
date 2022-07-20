@@ -1,7 +1,7 @@
 const express = require('express');
-const controller = require('../controller');
-
 const productsRouter = express.Router();
+
+const controller = require('../controller');
 
 productsRouter.get("/", (req, res) => {
     const products = controller.getAll();
@@ -21,9 +21,14 @@ productsRouter.get("/", (req, res) => {
   });
 
   productsRouter.post("/", (req, res) => {
-    console.log(req.body);
-    const tweet = controller.add(req.body.name, req.body.content);
-    res.status(201).send(tweet);
+    const product = controller.save(req.body);
+    res.status(201).send(product);
+  });
+
+  productsRouter.put("/:id", (req, res) => {
+    const productId = parseInt(req?.params?.id);
+    const product = controller.update(productId, req.body);
+    res.status(201).send(product);
   });
 
 module.exports = productsRouter;

@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { title } = require('process');
 
 let products = [{
     "title": "Escuadra",
@@ -24,27 +25,23 @@ module.exports = class Controller {
         this.file = file;
     }
 
-    async save(obj) {
+    static save(obj) {
         try {
-            
-            const products = await this.getAll();
-
             if (!products || !products.length) {
                 obj.id = 1;
-                await fs.promises.writeFile(this.file, JSON.stringify([obj], null, 2));
-
-                return obj.id;
+                products.push(obj);
+                return obj;
             }
 
             const lastProduct = products.slice(-1);
             obj.id = parseInt(lastProduct[0]?.id) + 1;
             
-            const addProduct = [...products, obj];
-            await fs.promises.writeFile(this.file, JSON.stringify(addProduct, null, 2));
+            const addProductToArray = [...products, obj];
+            products = addProductToArray;
 
-            return obj.id;
+            return obj;
         } catch (err) {
-            throw new Error('Ocurrió un error al guardar el archivo.', err);
+            throw new Error('Ocurrió un error al guardar el producto.', err);
         }
     }
 
@@ -92,4 +89,22 @@ module.exports = class Controller {
         }
         
     }
+
+    static update(id, newData) {
+        try {
+            const { title, price, thumbnail } = newData;
+            const productId = id;
+
+            products.forEach(product => {
+                const id = product.id;
+                if(productId === id){
+                    product.title = title;
+                    product.price = price;
+                    product.thumbnail = thumbnail;
+                }
+            })
+        } catch (err) {
+            throw new Error ('Ocurrió un error actualizando el producto.', err);
+        }
+      };
 }
