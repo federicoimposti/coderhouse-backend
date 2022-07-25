@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { title } = require('process');
+const error = { error: 'Producto no encontrado' };
 
 let products = [{
     "title": "Escuadra",
@@ -48,11 +48,11 @@ module.exports = class Controller {
     static getById(id) {
         try {
             if (!products) {
-                return null;
+                return error;
             }
 
             const product = products.find(product => product.id === id);
-            return product ? product : null;
+            return product ? product : error;
         } catch (err) {
             throw new Error('Ocrrió un error obteniendo el producto.', err);
         }
@@ -69,12 +69,19 @@ module.exports = class Controller {
     static deleteById(id) {
         try {
             if (!products) {
-                return;
+                return error;
             }
 
-            const productsFiltered = products.filter(product => product.id !== id);
-            products = productsFiltered;
-            return productsFiltered;
+            const product = this.getById(id);
+        
+            if(product?.id){
+                const productsFiltered = products.filter(product => product.id !== id);
+                products = productsFiltered;
+                return productsFiltered;
+            } else {
+                return error;
+            }
+            
         } catch (err) {
             throw new Error('Ocurrió un error eliminando el producto.', err);
         }
@@ -95,14 +102,22 @@ module.exports = class Controller {
             const { title, price, thumbnail } = newData;
             const productId = id;
 
-            products.forEach(product => {
-                const id = product.id;
-                if(productId === id){
-                    product.title = title;
-                    product.price = price;
-                    product.thumbnail = thumbnail;
-                }
-            })
+            const product = this.getById(productId);
+        
+            if(product?.id){
+                products.forEach(product => {
+                    const id = product.id;
+                    if(productId === id){
+                        product.title = title;
+                        product.price = price;
+                        product.thumbnail = thumbnail;
+                    }
+                });
+
+                return product;
+            } else {
+                return error;
+            }
         } catch (err) {
             throw new Error ('Ocurrió un error actualizando el producto.', err);
         }

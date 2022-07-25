@@ -3,51 +3,37 @@ const productsRouter = express.Router();
 
 const controller = require('../controller');
 
-const error = { error: 'Producto no encontrado' }
+const error = { error: 'Producto no encontrado' };
 
 productsRouter.get("/", (req, res) => {
-    const products = controller.getAll();
-    res.send(products);
+    const response = controller.getAll();
+    res.send(response);
   });
 
   productsRouter.get("/:id", (req, res) => {
     const productId = parseInt(req?.params?.id);
-    const product = controller.getById(productId);
+    const response = controller.getById(productId);
 
-    if(product){
-      res.send(product);
-    } else {
-      res.send(error)
-    }
+    res.status(200).send(response);
   });
 
   productsRouter.delete("/:id", (req, res) => {
     const productId = parseInt(req?.params?.id);
-    const product = controller.getById(productId);
-
-    if(product) {
-      controller.deleteById(productId);
-      res.send(`Producto ${productId} eliminado`);
-    } else {
-      res.send(error);
-    }
+    const response = controller.deleteById(productId);
+    
+    res.status(202).send(response);
   });
 
   productsRouter.post("/", (req, res) => {
-    const product = controller.save(req.body);
-    res.status(201).send(product);
+    const response = controller.save(req.body);
+    res.status(201).send(response);
   });
 
   productsRouter.put("/:id", (req, res) => {
     const productId = parseInt(req?.params?.id);
-    const product = controller.getById(productId);
-
-    if(product){
-      controller.update(productId, req.body);
-      res.status(201).send(product);
-    } else {
-      res.send(error);
-    }
+    const response = controller.update(productId, req.body);
+    
+    res.status(200).send(response);
   });
 
 module.exports = productsRouter;
