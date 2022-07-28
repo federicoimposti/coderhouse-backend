@@ -5,7 +5,7 @@ const controller = require('../controller');
 
 productFormRouter.get("/", (req, res) => {
     const response = controller.getAll();
-    res.render('pages/productForm', { products: response });
+    res.render('pages/productForm');
 });
 
 module.exports = productFormRouter;
