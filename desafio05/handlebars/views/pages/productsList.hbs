@@ -1,0 +1,33 @@
+<div class="container">
+    <div class="products-list-wrapper">
+        {{#unless products }}
+        <tr>
+            <td colspan="3">No hay productos</td>
+        </tr>
+        {{/unless}}
+
+        {{#if products}}
+            <table class="products-list">
+                <thead>
+                <tr>
+                    <th class="tg-0lax">Titulo</th>
+                    <th class="tg-0lax">Precio</th>
+                    <th class="tg-0lax">Url</th>
+                </tr>
+                </thead>
+                <tbody>
+                
+                    {{#each products}}
+                        <tr>
+                            <td>{{this.title}}</td>
+                            <td>{{this.price}}</td>
+                            <td><img class="product-image" src="{{this.image}}" /></td>
+                        </tr>
+                    {{/each}}
+                
+                </tbody>
+            </table>
+        {{/if}}
+    </div>
+    <a href="/" class="button">Ingresar producto</h3>
+</div>
