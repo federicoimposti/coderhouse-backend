@@ -1,0 +1,10 @@
+extends ../index.pug
+
+block content
+    .container
+        form(action="/productos", method="post", class="form-files")
+            input(type="text", placeholder="Nombre", name="title")
+            input(type="text", placeholder="Precio", name="price")
+            input(type="text", placeholder="URL Imagen", name="image")
+            input(type="submit", value="Enviar")
+        a.button(href="/productos")="Ver productos"
